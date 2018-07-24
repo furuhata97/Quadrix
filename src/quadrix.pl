@@ -129,13 +129,6 @@ na_borda_esquerda(Jogo, Pos) :-
 %  Verdadeiro se a posição Acima está acima de Pos em Jogo.
 
 pos_acima(Jogo, Pos, _) :-
-    quadrix(Linhas, Colunas, _) = Jogo,
-    S is Linhas * Colunas,
-    Pos >= S,
-    !,
-    fail.
-
-pos_acima(Jogo, Pos, _) :-
     na_borda_superior(Jogo, Pos),
     !,
     fail.
@@ -147,13 +140,6 @@ pos_acima(Jogo, Pos, Acima):-
 %% pos_esquerda(+Jogo, +Pos, ?Esquerda) is semidet
 %
 %  Verdadeiro se a posição Esquerda está à esquerda de Pos em Jogo.
-
-pos_esquerda(Jogo, Pos, _) :-
-    quadrix(Linhas, Colunas, _) = Jogo,
-    S is Linhas * Colunas,
-    Pos >= S,
-    !,
-    fail.
 
 pos_esquerda(Jogo, Pos, _) :-
     na_borda_esquerda(Jogo, Pos),

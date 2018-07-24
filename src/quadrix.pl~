@@ -61,7 +61,6 @@ solucao(Jogo, X, Pos) :-
 %  maneira que suas bordas adjacentes tenham o mesmo número.
 
 blocos_correspondem(Jogo, Pos) :-
-%    _ = (Jogo, Blocos).
      corresponde_acima(Jogo, Pos),
      corresponde_esquerda(Jogo, Pos).
 
