@@ -39,23 +39,19 @@
 solucao(Jogo, Blocos) :-
     P is 0,
     solucao(Jogo, Blocos, P).
-%    _ = (Jogo, Blocos), fail.
 
 solucao(Jogo, [], _) :-
     quadrix(Linhas, Colunas, _) = Jogo,
     jogo_quadrix(Jogo, Linhas, Colunas),!.
 
 
-solucao(Jogo, [X|XS], Pos) :-
-    %[X|XS] = Blocos,
-    bloco_pos(Jogo, Pos, X),
+solucao(Jogo, X, Pos) :-
+    select(Y, X, XS),
+    bloco_pos(Jogo, Pos, Y),
     blocos_correspondem(Jogo, Pos),
     P is Pos+1,
     solucao(Jogo, XS, P), !.
 
-solucao(Jogo, [X|XS], Pos):-
-    P is X,
-    solucao(Jogo, XS, Pos).
 
 
 %% blocos_correspondem(?Jogo, ?Pos) is semidet

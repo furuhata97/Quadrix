@@ -7,7 +7,7 @@
 %
 %  run_tests(quadrix).                   % para executar os testes básicos
 %
-%  run_tests(quadrix_grandes).           % para executar os testes para os jogos grandes
+%  run_tests(quadrix_grande).           % para executar os testes para os jogos grandes
 %
 %  run_tests(quadrix_desafio).           % para executar os testes do desafio
 %
@@ -53,10 +53,38 @@ test(na_borda_superior, fail) :-
     jogo_quadrix(Jogo, 3, 5),
     na_borda_superior(Jogo, 5).
 
+test(na_borda_esquerda) :-
+    jogo_quadrix(Jogo, 3, 5),
+    na_borda_esquerda(Jogo, 0),
+    na_borda_esquerda(Jogo, 5),
+    na_borda_esquerda(Jogo, 10).
+
+test(na_borda_esquerda, fail) :-
+    jogo_quadrix(Jogo, 3, 5),
+    na_borda_esquerda(Jogo, 1).
+
 test(pos_acima, A =:= 2) :-
     jogo_quadrix(Jogo, 3, 5),
     % a posição acima da posição 7 é a posição A =:= 2
     pos_acima(Jogo, 7, A).
+
+test(pos_acima, fail) :-
+    A is 1,
+    jogo_quadrix(Jogo, 3, 5),
+    % a posição acima da posição 7 não é a posição A =:= 1
+    pos_acima(Jogo, 7, A).
+
+test(pos_esquerda, A =:= 12) :-
+    jogo_quadrix(Jogo, 3, 5),
+    % a posição acima da posição 7 é a posição A =:= 12
+    pos_esquerda(Jogo, 13, A).
+
+test(pos_esquerda, fail) :-
+    A is 14,
+    jogo_quadrix(Jogo, 3, 5),
+    % a posição acima da posição 7 é a posição A =:= 12
+    pos_esquerda(Jogo, 13, A).
+
 
 % posição 1
 %    5
@@ -83,6 +111,52 @@ test(corresponde_acima, fail) :-
     bloco_pos(Jogo, 6, bloco(3, 4, 6, 9)),
     % não corresponde, no lugar do 3 deveria ser 7
     corresponde_acima(Jogo, 6).
+
+test(corresponde_esquerda) :-
+    jogo_quadrix(Jogo, 3, 5),
+    bloco_pos(Jogo, 0, bloco(5, 2, 7, 8)),
+    bloco_pos(Jogo, 1, bloco(7, 4, 6, 2)),
+    % não tem ninguém a esquerda de 0, portanto corresponde
+    corresponde_esquerda(Jogo, 0),
+    % quem está a esquerda de 1 é o 0, na borda esquerda da posição 1, tem o 2, e na
+    % borda direita da posição 0 tem o 2, portanto corresponde
+    corresponde_esquerda(Jogo, 1).
+
+test(corresponde_esquerda, fail) :-
+    jogo_quadrix(Jogo, 3, 5),
+    bloco_pos(Jogo, 0, bloco(5, 2, 7, 8)),
+    bloco_pos(Jogo, 1, bloco(7, 4, 6, 9)),
+    % não corresponde, no lugar do 9 deveria ser 2
+    corresponde_esquerda(Jogo, 1).
+
+test(blocos_correspondem) :-
+    jogo_quadrix(Jogo, 3, 5),
+    bloco_pos(Jogo, 1, bloco(5, 2, 7, 8)),
+    bloco_pos(Jogo, 6, bloco(7, 4, 6, 2)),
+    bloco_pos(Jogo, 5, bloco(9, 2, 1, 3)),
+    blocos_correspondem(Jogo, 6).
+    % quem está a esquerda de 6 é o 5, na borda esquerda da posição 6, tem o 2, e na
+    % borda direita da posição 5 tem o 2, portanto corresponde
+    % quem está acima de 6 é o 1, na borda superior da posição 6, tem o 7, e na
+    % borda inferior da posição 1 tem o 7, portanto corresponde
+
+test(blocos_correspondem, fail) :-
+    jogo_quadrix(Jogo, 3, 5),
+    bloco_pos(Jogo, 1, bloco(5, 2, 7, 8)),
+    bloco_pos(Jogo, 6, bloco(7, 4, 6, 2)),
+    bloco_pos(Jogo, 5, bloco(9, 1, 2, 3)),
+    blocos_correspondem(Jogo, 6).
+    % quem está a esquerda de 6 é o 5, na borda esquerda da posição 6, tem o 2, e na
+    % borda direita da posição 5 tem o 1, portanto nao corresponde
+
+test(blocos_correspondem, fail) :-
+    jogo_quadrix(Jogo, 3, 5),
+    bloco_pos(Jogo, 1, bloco(5, 2, 8, 7)),
+    bloco_pos(Jogo, 6, bloco(7, 4, 6, 2)),
+    bloco_pos(Jogo, 5, bloco(9, 2, 1, 3)),
+    blocos_correspondem(Jogo, 6).
+    % quem está acima de 6 é o 1, na borda superior da posição 6, tem o 7, e na
+    % borda inferior da posição 1 tem o 8, portanto nao corresponde
 
 :- end_tests(quadrix).
 
@@ -113,7 +187,7 @@ teste_caso(Caso) :-
     solucao(Jogo, BlocosRev),
     quadrix(_, _, R) = Jogo,
     % você pode descomentar a linha a seguir para ver o resultado encontrado pelo seu predicado solucao
-     write(R), nl,
+    % write(R), nl,
     % a resposta deve ser a lista dos blocos na ordem normal
     R == Blocos.
 
